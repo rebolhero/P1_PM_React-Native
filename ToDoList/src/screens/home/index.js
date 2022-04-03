@@ -10,6 +10,9 @@ export default function Home(){
     //Criar uma lista de objetos Tarefas
     let[tarefa, setTarefa] = useState('');
     let[descTarefa, setDescTarefa] = useState('');
+    let[tarefaView, setTarefaView] = useState('');
+    let[idTarefaView, setIdTarefaView] = useState('');
+    let[descTarefaView, setDescTarefaView] = useState('');
     let[saudacao, setSaudacao] = useState('');
     let[minhasTarefas, setMinhasTarefas] = useState([
         {
@@ -63,12 +66,12 @@ export default function Home(){
       
       }
 
-    function deletarTarefa(index){
-        console.log('id tarefa:' + index);
+    function deletarTarefa(id){
+        console.log('id tarefa:' + id);
         let novasTarefas = [...minhasTarefas];
 
         novasTarefas = novasTarefas.filter((it, i)=>{
-            if(i != index){
+            if(it.id != id){
                 return true;
             }else{
                 return false;
@@ -77,6 +80,7 @@ export default function Home(){
 
         setMinhasTarefas(novasTarefas);
     }
+
 
     return(
         <View style={styles.container}>
@@ -136,7 +140,7 @@ export default function Home(){
             >
                 <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Modal Preview</Text>
+                    <Text style={styles.modalText}>{tarefa}</Text>
                     <Pressable
                     style={[styles.button, styles.buttonClose]}
                     onPress={() => setModalPreview(!modalPreview)}
