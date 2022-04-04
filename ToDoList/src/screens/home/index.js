@@ -1,36 +1,44 @@
 import React,{useState, useEffect} from "react";
-import {View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Alert, Modal,  Pressable} from 'react-native';
+import {View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Alert, Modal,  Pressable, CheckBox} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 export default function Home(){
 
     const [modalNovo, setModalNovo] = useState(false);
     const [modalPreview, setModalPreview] = useState(false);
+    const [modalEdit, setModalEdit] = useState(false);
+    const [isSelected, setSelection] = useState(false);
     //Criar uma lista de objetos Tarefas
     let[tarefa, setTarefa] = useState('');
     let[descTarefa, setDescTarefa] = useState('');
-    let[tarefaView, setTarefaView] = useState('');
-    let[idTarefaView, setIdTarefaView] = useState('');
-    let[descTarefaView, setDescTarefaView] = useState('');
+    let[tarefaEdit, setTarefaEdit] = useState('');
+    let[descTarefaEdit, setDescTarefaEdit] = useState('');
+    let[idTarefaEdit, setIdTarefaEdit] = useState('');
     let[saudacao, setSaudacao] = useState('');
     let[minhasTarefas, setMinhasTarefas] = useState([
         {
             id: 1,
             nome: 'tarefa 1',
-            descricao:'desc tarefa 1'
+            descricao:'desc tarefa 1',
+            check: 0
         },
         {
             id: 2,
             nome: 'tarefa 2',
-            descricao:'desc tarefa 1'
+            descricao:'desc tarefa 1',
+            check: 0
         },
         {
             id: 3,
             nome: 'tarefa 3',
-            descricao:'desc tarefa 1'
+            descricao:'desc tarefa 1',
+            check: 0
         },
     ]);
+
+    let[minhasTarefasView, setMinhasTarefasView] = useState('');
 
     useEffect(()=>{
         const currentHour = new Date().getHours();
@@ -47,6 +55,7 @@ export default function Home(){
     //funcão para adicionar um tarefa
 
     function adicionaTarefa(){
+
         if(tarefa.trim() != ''){
          const dados = {
              id: String(new Date().getTime()),
@@ -70,8 +79,8 @@ export default function Home(){
         console.log('id tarefa:' + id);
         let novasTarefas = [...minhasTarefas];
 
-        novasTarefas = novasTarefas.filter((it, i)=>{
-            if(it.id != id){
+        novasTarefas = novasTarefas.filter((item)=>{
+            if(item.id != id){
                 return true;
             }else{
                 return false;
@@ -81,10 +90,56 @@ export default function Home(){
         setMinhasTarefas(novasTarefas);
     }
 
+    function buscarTarefa(id){
+        console.log('id tarefa:' + id);
+        let novasTarefas = [...minhasTarefas];
+
+        novasTarefas = novasTarefas.filter((item)=>{
+            if(item.id == id){
+                setDescTarefaEdit(item.descricao);
+                setTarefaEdit(item.nome);
+                setIdTarefaEdit(item.id);
+                return true;
+            }else{
+                return false;
+            }
+        });
+        setModalPreview (true);
+        setMinhasTarefasView(novasTarefas);
+    }
+
+    function alterarTarefa(){
+        if(tarefaEdit.trim() != ''){
+            const dados = {
+                id: String(new Date().getTime()),
+                nome: tarefaEdit,
+                descricao: descTarefaEdit
+              };
+         
+          
+              setMinhasTarefas((oldState) => [... oldState, dados]);
+           }
+           else{
+               alert('Digite um nome de uma tarefa')
+           }
+    }
+
+    function checkTarefa(id){
+        let novasTarefas = [...minhasTarefas];
+
+        novasTarefas = novasTarefas.filter((item)=>{
+            if(item.id == id){
+                item.check = !item.check;
+            }
+        console.log(item.check);
+
+        });
+        setMinhasTarefas(novasTarefas);
+    }
+
 
     return(
         <View style={styles.container}>
-            
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -128,25 +183,94 @@ export default function Home(){
                 </View>
                 </View>
             </Modal>
+            
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalEdit}
+                style={{elevation:1, zIndex:1}}
+                onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                setModalNovo(!modalEdit);
+                }}
+            >
+                <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                    <Pressable
+                    style={[styles.botaoFechar]}
+                    onPress={() => setModalEdit(!modalEdit)}
+                    >
+                    <Text style={styles.textoBotaoFechar}>X</Text>
+                    </Pressable>
+
+                    <Text style={styles.titulo}>Editar Tarefa</Text>
+                    
+                    <TextInput 
+                        value={tarefaEdit}
+                        returnKeyType="name" 
+                        style={styles.campo} 
+                        onChangeText={setTarefaEdit} 
+                        placeholder="Digite o nome da tarefa"
+                        placeholderTextColor="#FFF" 
+                    />
+                    <TextInput 
+                        value={descTarefaEdit}
+                        returnKeyType="desc" 
+                        style={styles.campo} 
+                        onChangeText={setDescTarefaEdit} 
+                        placeholder="Digite a descrição da tarefa"
+                        placeholderTextColor="#FFF" 
+                    />
+                    <TouchableOpacity style={styles.botaoCriar}  onPress={alterarTarefa}>
+                    <Ionicons name="checkmark" size={32} color="white" style={styles.textoBotaoCriar}/>
+                    </TouchableOpacity>
+                    
+                </View>
+                </View>
+            </Modal>
+
 
             <Modal
                 animationType="slide"
                 transparent={true}
                 visible={modalPreview}
+                style={{elevation:2, zIndex:2}}
                 onRequestClose={() => {
                 Alert.alert("Modal has been closed.");
                 setModalPreview(!modalPreview);
                 }}
             >
                 <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <Text style={styles.modalText}>{tarefa}</Text>
-                    <Pressable
-                    style={[styles.button, styles.buttonClose]}
+                <View style={styles.modalPreview}>
+                <Pressable
+                    style={[styles.botaoFechar]}
                     onPress={() => setModalPreview(!modalPreview)}
                     >
-                    <Text style={styles.textStyle}>Hide Modal</Text>
-                    </Pressable>
+                    <Text style={styles.textoBotaoFechar}>X</Text>
+                </Pressable>
+                <FlatList
+                data={minhasTarefasView}
+                keyExtractor={(item) => item.id}
+                renderItem={(({item}) => 
+                    <View style={styles.botaoTarefa}>
+                        <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', alignSelf:'stretch', width:'100%'}}>
+                            <View>
+                                <Text style={styles.textoBotaoTarefa}>{item.nome}</Text>
+                                <Text style={styles.subTextoBotaoTarefa}>{item.descricao}</Text>
+                            </View>
+                        </View>
+                    </View>
+                )}
+          
+                />
+
+                <Pressable
+                    style={[styles.botaoCriar]}
+                    onPress={() => setModalEdit(true)}
+                >
+                    <MaterialIcons name="edit" size={24} color="white" style={styles.textoBotaoEditar}/>
+                </Pressable> 
+                
                 </View>
                 </View>
             </Modal>
@@ -179,14 +303,19 @@ export default function Home(){
                             <View >
                             <Pressable
                                 style={{flexDirection:'column', justifyContent:'space-between', alignSelf: 'stretch'}}
-                                onPress={() => setModalPreview (true)}
+                                onPress={() => buscarTarefa(item.id)}
                             >
                                 <Text style={styles.textoBotaoTarefa}>{item.nome}</Text>
                                 <Text style={styles.subTextoBotaoTarefa}>{item.descricao}</Text>
                             </Pressable>
                             </View>
                             <TouchableOpacity onPress={()=>deletarTarefa(item.id)}>
-                                <Ionicons name="md-checkmark-circle" size={32} color="white"/>
+                            {/* <TouchableOpacity onPress={() => checkTarefa(item.id)}> */}
+                            <CheckBox
+                                    value={item.check}
+                                    style={styles.checkbox}
+                                    
+                                />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -275,6 +404,18 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
 
+    botaoEditar:{
+        backgroundColor: '#93D2F9',
+        height:50,
+        width: 50,
+        borderRadius: 50,
+        alignItems: 'center',
+        marginTop: 20,
+        marginBottom: 20,
+        alignSelf:'flex-end'
+    },
+
+
     botaoFechar:{
         width:'100%',
         justifyContent:'flex-end'
@@ -289,6 +430,11 @@ const styles = StyleSheet.create({
 
     textoBotaoCriar:{
         padding: 5
+    },
+
+    textoBotaoEditar:{
+        alignSelf: 'center',
+        paddingTop:10
     },
 
     textoBotaoFechar:{
@@ -336,6 +482,22 @@ const styles = StyleSheet.create({
     modalView: {
         margin: 20,
         backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+      },
+    modalPreview: {
+        margin: 20,
+        backgroundColor: "white",
+        width:300,
         borderRadius: 20,
         padding: 35,
         alignItems: "center",
