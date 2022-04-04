@@ -76,7 +76,6 @@ export default function Home(){
       }
 
     function deletarTarefa(id){
-        console.log('id tarefa:' + id);
         let novasTarefas = [...minhasTarefas];
 
         novasTarefas = novasTarefas.filter((item)=>{
@@ -91,14 +90,13 @@ export default function Home(){
     }
 
     function buscarTarefa(id){
-        console.log('id tarefa:' + id);
         let novasTarefas = [...minhasTarefas];
 
         novasTarefas = novasTarefas.filter((item)=>{
             if(item.id == id){
                 setDescTarefaEdit(item.descricao);
                 setTarefaEdit(item.nome);
-                setIdTarefaEdit(item.id);
+                setIdTarefaEdit(id);
                 return true;
             }else{
                 return false;
@@ -110,18 +108,32 @@ export default function Home(){
 
     function alterarTarefa(){
         if(tarefaEdit.trim() != ''){
-            const dados = {
-                id: String(new Date().getTime()),
-                nome: tarefaEdit,
-                descricao: descTarefaEdit
-              };
+        //     const dados = {
+        //         id: String(new Date().getTime()),
+        //         nome: tarefaEdit,
+        //         descricao: descTarefaEdit
+        //       };
          
           
-              setMinhasTarefas((oldState) => [... oldState, dados]);
-           }
-           else{
+        //       setMinhasTarefas((oldState) => [... oldState, dados]);
+        let novasTarefas = [...minhasTarefas];
+        novasTarefas = novasTarefas.filter((item)=>{
+            if(item.id == idTarefaEdit){
+                item.nome = tarefaEdit;
+                item.descricao = descTarefaEdit;
+                return true;
+            }else{
+                return true;
+            }
+        })
+        setMinhasTarefas(novasTarefas);
+        setModalEdit(!modalEdit);
+        setModalPreview(!modalPreview);
+
+        }else{
                alert('Digite um nome de uma tarefa')
            }
+
     }
 
     function checkTarefa(id){
@@ -130,8 +142,10 @@ export default function Home(){
         novasTarefas = novasTarefas.filter((item)=>{
             if(item.id == id){
                 item.check = !item.check;
+                return true;
+            }else{
+                return true;
             }
-        console.log(item.check);
 
         });
         setMinhasTarefas(novasTarefas);
@@ -198,7 +212,7 @@ export default function Home(){
                 <View style={styles.modalView}>
                     <Pressable
                     style={[styles.botaoFechar]}
-                    onPress={() => setModalEdit(!modalEdit)}
+                    onPress={() => {setModalEdit(!modalEdit); setModalPreview(!modalPreview)}}
                     >
                     <Text style={styles.textoBotaoFechar}>X</Text>
                     </Pressable>
@@ -266,7 +280,7 @@ export default function Home(){
 
                 <Pressable
                     style={[styles.botaoCriar]}
-                    onPress={() => setModalEdit(true)}
+                    onPress={() => {setModalEdit(true); setModalPreview(false)}}
                 >
                     <MaterialIcons name="edit" size={24} color="white" style={styles.textoBotaoEditar}/>
                 </Pressable> 
@@ -295,7 +309,7 @@ export default function Home(){
                 <LinearGradient
                             start={{ x: 0, y: 0.5 }}
                             end={{ x: 1, y: 0.5 }}
-                            colors={['transparent', '#D494FF']}
+                            colors={['transparent', '#8bbcff']}
                             style={styles.botaoGradiente}
                         >
                     <View style={styles.botaoTarefa}>
@@ -309,8 +323,8 @@ export default function Home(){
                                 <Text style={styles.subTextoBotaoTarefa}>{item.descricao}</Text>
                             </Pressable>
                             </View>
-                            <TouchableOpacity onPress={()=>deletarTarefa(item.id)}>
-                            {/* <TouchableOpacity onPress={() => checkTarefa(item.id)}> */}
+                            {/* <TouchableOpacity onPress={()=>deletarTarefa(item.id)}> */}
+                            <TouchableOpacity onPress={() => checkTarefa(item.id)}>
                             <CheckBox
                                     value={item.check}
                                     style={styles.checkbox}
@@ -348,7 +362,7 @@ const styles = StyleSheet.create({
 
     titulo:{
         color: '#1E1E1E',
-        fontSize:34,
+        fontSize:44,
         fontWeight: 'bold',
         marginBottom: 10,
         justifyContent: "center",
@@ -358,15 +372,17 @@ const styles = StyleSheet.create({
 
     subTitulo:{
         color: '#1E1E1E',
-        fontSize:20,
+        fontSize:30,
         fontWeight: 'bold',
         marginBottom: 10,
+        marginTop:10
     },
 
 
     campo:{
-        backgroundColor: '#C9C5FC',
+        backgroundColor: '#8bbcff',
         fontSize:18,
+        color: '#FFF',
         marginTop:30,
         borderRadius:50,
         padding:15,
@@ -461,7 +477,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         width:'100%',
         borderLeftWidth:'10px',
-        borderLeftColor: '#AE06F4'
+        borderLeftColor: '#8bbcff'
 
     },
 
@@ -529,5 +545,11 @@ const styles = StyleSheet.create({
       modalText: {
         marginBottom: 15,
         textAlign: "center"
+      },
+      checkbox:{
+          height:25,
+          width:25,
+          borderRadius: 50,
+          color: 'blue'
       }
     });
