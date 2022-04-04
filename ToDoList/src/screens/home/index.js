@@ -3,6 +3,7 @@ import {View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Alert, Mo
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons'; 
+import { FontAwesome5 } from '@expo/vector-icons'; 
 
 export default function Home(){
 
@@ -20,20 +21,20 @@ export default function Home(){
     let[minhasTarefas, setMinhasTarefas] = useState([
         {
             id: 1,
-            nome: 'tarefa 1',
-            descricao:'desc tarefa 1',
+            nome: 'Tarefa 1',
+            descricao:'Descrição da tarefa 1',
             check: 0
         },
         {
             id: 2,
-            nome: 'tarefa 2',
-            descricao:'desc tarefa 1',
+            nome: 'Tarefa 2',
+            descricao:'Descrição da tarefa 2',
             check: 0
         },
         {
             id: 3,
-            nome: 'tarefa 3',
-            descricao:'desc tarefa 1',
+            nome: 'Tarefa 3',
+            descricao:'Descrição da tarefa 3',
             check: 0
         },
     ]);
@@ -68,6 +69,7 @@ export default function Home(){
            setMinhasTarefas((oldState) => [... oldState, dados]);
            setTarefa('');
            setDescTarefa('');
+           setModalNovo(!modalNovo);
         }
         else{
             alert('Digite um nome de uma tarefa')
@@ -255,37 +257,43 @@ export default function Home(){
                 }}
             >
                 <View style={styles.centeredView}>
-                <View style={styles.modalPreview}>
-                <Pressable
-                    style={[styles.botaoFechar]}
-                    onPress={() => setModalPreview(!modalPreview)}
-                    >
-                    <Text style={styles.textoBotaoFechar}>X</Text>
-                </Pressable>
-                <FlatList
-                data={minhasTarefasView}
-                keyExtractor={(item) => item.id}
-                renderItem={(({item}) => 
-                    <View style={styles.botaoTarefa}>
-                        <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', alignSelf:'stretch', width:'100%'}}>
-                            <View>
-                                <Text style={styles.textoBotaoTarefa}>{item.nome}</Text>
-                                <Text style={styles.subTextoBotaoTarefa}>{item.descricao}</Text>
+                    <View style={styles.modalPreview}>
+                        <Pressable
+                            style={[styles.botaoFechar]}
+                            onPress={() => setModalPreview(!modalPreview)}
+                            >
+                            <Text style={styles.textoBotaoFechar}>X</Text>
+                        </Pressable>
+                        <FlatList
+                        data={minhasTarefasView}
+                        keyExtractor={(item) => item.id}
+                        renderItem={(({item}) => 
+                            <View style={styles.botaoTarefa}>
+                                <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', alignSelf:'stretch', width:'100%'}}>
+                                    <View>
+                                        <Text style={styles.textoBotaoTarefa}>{item.nome}</Text>
+                                        <Text style={styles.subTextoBotaoTarefa}>{item.descricao}</Text>
+                                    </View>
+                                </View>
                             </View>
+                        )}
+                
+                        />
+
+                        <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-around', alignSelf:'stretch'}}>
+                            <Pressable
+                                style={[styles.botaoCriar]}
+                                onPress={() => {setModalEdit(true); setModalPreview(false)}}
+                            >
+                                <MaterialIcons name="edit" size={24} color="white" style={styles.textoBotaoEditar}/>
+                            </Pressable> 
+
+                            
+                            <TouchableOpacity style={styles.botaoExcluir} onPress={()=>{deletarTarefa(idTarefaEdit); setModalPreview(false)}}>
+                                <FontAwesome5 style={styles.textoBotaoExcluir} name="trash" size={24} color="#FFF" />
+                            </TouchableOpacity>
                         </View>
                     </View>
-                )}
-          
-                />
-
-                <Pressable
-                    style={[styles.botaoCriar]}
-                    onPress={() => {setModalEdit(true); setModalPreview(false)}}
-                >
-                    <MaterialIcons name="edit" size={24} color="white" style={styles.textoBotaoEditar}/>
-                </Pressable> 
-                
-                </View>
                 </View>
             </Modal>
 
@@ -420,6 +428,16 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
 
+    botaoExcluir:{
+        backgroundColor: '#ff4545',
+        height:50,
+        width: 50,
+        borderRadius: 50,
+        alignItems: 'center',
+        marginTop: 20,
+        marginBottom: 20
+    },
+
     botaoEditar:{
         backgroundColor: '#93D2F9',
         height:50,
@@ -446,6 +464,11 @@ const styles = StyleSheet.create({
 
     textoBotaoCriar:{
         padding: 5
+    },
+
+    textoBotaoExcluir:{
+        padding: 13,
+        fontSize:20
     },
 
     textoBotaoEditar:{
