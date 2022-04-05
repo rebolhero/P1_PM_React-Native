@@ -306,6 +306,7 @@ export default function Home() {
                 data={minhasTarefas}
                 style={{ alignSelf: 'stretch', marginTop: '80px' }}
                 keyExtractor={(item) => item.id}
+                inverted={true}
                 renderItem={(({ item }) =>
                     <LinearGradient
                         start={{ x: 0, y: 0.5 }}
