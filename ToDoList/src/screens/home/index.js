@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from "react";
-import {View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Alert, Modal,  Pressable, CheckBox} from 'react-native';
+import {View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Alert, Modal,  Pressable, CheckBox, } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons'; 
@@ -21,8 +21,8 @@ export default function Home(){
     let[minhasTarefas, setMinhasTarefas] = useState([
         {
             id: 1,
-            nome: 'Tarefa 1',
-            descricao:'Descrição da tarefa 1',
+            nome: 'Tarefa 1: Essa Tarefa é grande para testar o limite de caractere',
+            descricao:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
             check: 0
         },
         {
@@ -35,6 +35,18 @@ export default function Home(){
             id: 3,
             nome: 'Tarefa 3',
             descricao:'Descrição da tarefa 3',
+            check: 0
+        },
+        {
+            id: 4,
+            nome: 'Tarefa 4',
+            descricao:'Descrição da tarefa 4',
+            check: 0
+        },
+        {
+            id: 5,
+            nome: 'Tarefa 5',
+            descricao:'Descrição da tarefa 5',
             check: 0
         },
     ]);
@@ -271,8 +283,8 @@ export default function Home(){
                             <View style={styles.botaoTarefa}>
                                 <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', alignSelf:'stretch', width:'100%'}}>
                                     <View>
-                                        <Text style={styles.textoBotaoTarefa}>{item.nome}</Text>
-                                        <Text style={styles.subTextoBotaoTarefa}>{item.descricao}</Text>
+                                        <Text style={styles.textoBotaoTarefaPreview} >{item.nome}</Text>
+                                        <Text style={styles.subTextoBotaoTarefaPreview}>{item.descricao}</Text>
                                     </View>
                                 </View>
                             </View>
@@ -298,20 +310,16 @@ export default function Home(){
             </Modal>
 
 
+            <View style={styles.topo}>
+                <Text style={styles.titulo}>To Do List</Text>
 
-            <Text style={styles.titulo}>To Do List</Text>
-
-            <TextInput 
-                style={styles.campo} 
-            />
-
-            <View style={{justifyContent:'flex-start', alignSelf:'stretch'}}>
-                <Text style={styles.subTitulo}>Itens</Text>
+                <View style={{justifyContent:'flex-start', alignSelf:'stretch'}}>
+                    <Text style={styles.subTitulo}>Itens</Text>
+                </View>
             </View>
-
             <FlatList
                 data={minhasTarefas}
-                style={{alignSelf:'stretch'}}
+                style={{alignSelf:'stretch', marginTop:'70px'}}
                 keyExtractor={(item) => item.id}
                 renderItem={(({item}) => 
                 <LinearGradient
@@ -327,8 +335,8 @@ export default function Home(){
                                 style={{flexDirection:'column', justifyContent:'space-between', alignSelf: 'stretch'}}
                                 onPress={() => buscarTarefa(item.id)}
                             >
-                                <Text style={styles.textoBotaoTarefa}>{item.nome}</Text>
-                                <Text style={styles.subTextoBotaoTarefa}>{item.descricao}</Text>
+                                <Text style={styles.textoBotaoTarefa} numberOfLines={1} >{item.nome}</Text>
+                                <Text style={styles.subTextoBotaoTarefa} numberOfLines={1} >{item.descricao}</Text>
                             </Pressable>
                             </View>
                             {/* <TouchableOpacity onPress={()=>deletarTarefa(item.id)}> */}
@@ -366,6 +374,7 @@ const styles = StyleSheet.create({
         paddingHorizontal:20,
         flexDirection: 'column',
         alignItems: 'center',
+        alignSelf:'stretch'
     },
 
     titulo:{
@@ -507,10 +516,34 @@ const styles = StyleSheet.create({
     textoBotaoTarefa:{
         fontSize:22,
         fontWeight: 'bold',
-        marginBottom: 5
+        marginBottom: 5,
+        width:'200px'
+    },
+    textoBotaoTarefaPreview:{
+        fontSize:20,
+        fontWeight: 'bold',
+        marginBottom: 5,
+        width:'300px',
+        flexWrap:'wrap',
+        height:'100%',
+        paddingLeft:'30px',
+        paddingRight:'30px',
+        textAlign: 'justify'
+
     },
     subTextoBotaoTarefa:{
-        fontSize: 17
+        fontSize: 17,
+        width:'200px'
+    },
+    subTextoBotaoTarefaPreview:{
+        fontSize: 17,
+        width:'300px',
+        flexWrap:'wrap',
+        height:'100%',
+        paddingLeft:'30px',
+        paddingRight:'30px',
+        textAlign: 'justify'
+
     },
     centeredView: {
         flex: 1,
@@ -574,5 +607,15 @@ const styles = StyleSheet.create({
           width:25,
           borderRadius: 50,
           color: 'blue'
+      },
+      topo:{
+          flexDirection:'column',
+          top: 0,
+          backgroundColor:'#FFF',
+          position:'fixed',
+          alignItems:'stretch',
+          height:'130px',
+          width:'95%',
+          zIndex:1
       }
     });
