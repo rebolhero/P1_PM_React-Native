@@ -17,7 +17,7 @@ Trabalho executado por:
 
 * **Desenvolvedor** - [Luiz Fernando Mauro Ribeiro da Silva](https://github.com/luizzz4727)
 * **Desenvolvedor** - [Maria Gabriele Rebolhero Grillo](https://github.com/rebolhero)
-*  **Desenvolvedor** - [Julio Augusto Silva](http://linkedin.com/in/julio-augusto-a99308119)
+*  **Desenvolvedor** - [Julio Augusto Silva](https://github.com/augustojulio-code)
 
 Alunos do 5º semestre de Análise e Desenvolvimento de Sistemas da Fatec Santana de Parnaíba
 
