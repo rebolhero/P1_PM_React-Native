@@ -304,7 +304,7 @@ export default function Home() {
             </View>
             <FlatList
                 data={minhasTarefas}
-                style={{ alignSelf: 'stretch', marginTop: '70px' }}
+                style={{ alignSelf: 'stretch', marginTop: '80px' }}
                 keyExtractor={(item) => item.id}
                 renderItem={(({ item }) =>
                     <LinearGradient
@@ -366,6 +366,7 @@ const styles = StyleSheet.create({
         fontSize: 44,
         fontWeight: 'bold',
         marginBottom: 10,
+        marginTop:'10px',
         justifyContent: "center",
         textAlign: "center"
 
@@ -376,6 +377,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         marginBottom: 10,
+        marginLeft:20,
         marginTop: 10
     },
 
@@ -599,7 +601,7 @@ const styles = StyleSheet.create({
         position: 'fixed',
         alignItems: 'stretch',
         height: '130px',
-        width: '95%',
+        width: '105%',
         zIndex: 1
     }
 });
